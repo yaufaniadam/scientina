@@ -18,9 +18,9 @@ require_once('inc/midtrans-php/Midtrans.php');
 
 require 'update-checker/plugin-update-checker.php';
 $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-	'https://solusidesain-update-theme.netlify.app/labip/theme.json',
+	'https://solusidesain-update-theme.netlify.app/scientina/theme.json',
 	__FILE__, //Full path to the main plugin file or functions.php.
-	'lab-ip'
+	'scientina'
 );
 
 if (!defined('WP_DEBUG')) {
