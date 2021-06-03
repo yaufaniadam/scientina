@@ -478,7 +478,7 @@ function proses_bayar()
                 'shipping_address' => ''
             );
             
-            $enable_payments = array('mandiri_clickpay');
+            $enable_payments = array('mandiri_clickpay', 'credit_card');
             
             $transaction = array(
                 'enabled_payments' => $enable_payments,
