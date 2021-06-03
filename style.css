@@ -1,0 +1,256 @@
+/* ===================================================================================
+
+* Theme Name: ScientinaSkill
+* Theme URI: https://solusidesain.net
+* Author: Yaufani Adam
+* Author URI: https://solusidesain.net
+* Description: Theme for Scientina Skill
+* Version: 1.0.0
+* Template: generatepress
+* License: GNU General Public License version 3.0
+* License URI: http://www.gnu.org/licenses/gpl-3.0.html
+
+====================================================================================== */
+
+/* ---- Ultimate Membership ---- */
+
+.um .um-field-label, .um-field-checkbox-state i, .um-field-radio-state i, .um-field-checkbox-option, .um-field-radio-option,
+a.um-link-alt {
+  color: #fff  !important;
+}
+
+.um-left input[type=submit].um-button  {
+  background-color: #f5a811 !important;
+}
+
+
+/* ------ button ----- */
+.button {
+  border-radius: 4px;
+  border: none;
+  text-align: center;
+  width: 100%;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+.button.button_beli {
+  background-color: #f4511e;  
+  color: #FFFFFF; 
+  font-size: 28px;
+  padding: 20px; 
+  margin: 5px;
+}
+.button.button_checkout {
+  background-color: #f4511e;  
+  color: #FFFFFF; 
+  font-size: 18px;
+  padding: 10px; 
+}
+
+.button_checkout.disabled {
+  cursor:default;
+  background:#d08872;
+  color:#9a6353;
+}
+
+.loginheader {
+  font-size: 14px;
+  font-family: "roboto";
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+/* harga */
+h2.elementor-heading-title {
+  font-size: 21px;
+  font-weight: 300;
+  color:#ffffff;
+}
+
+ol.trainer {
+  margin-left:20px;
+  margin-bottom:0;
+}
+
+ol.trainer li {
+  font-size: 21px;
+  font-weight: 300;
+  color:#ffffff;
+}
+
+.cek_running.single {
+  display:inline-block; 
+  font-size: 16px; 
+  font-weight: 500;
+  text-transform: uppercase;
+  fill: rgb(0, 0, 0);
+  color: rgb(0, 0, 0);
+  border-radius:3px;
+  padding: 2px 5px 0px;
+  margin:0;
+  font-family:roboto;
+}
+.cek_running.single.Scheduled {
+  background-color: rgb(255, 230, 0);
+}
+.cek_running.single.Running {
+  background-color: rgb(0, 255, 106);
+}
+.cek_running.single.Finished {
+  background-color: rgb(236, 175, 156);
+}
+.online_button {
+  display:inline-block; 
+  font-weight: 500; 
+  fill: rgb(0, 0, 0);
+  color: rgb(0, 0, 0); 
+  margin:0;
+  font-family:roboto;
+}
+.online_button.Online.single {
+  background-color: rgb(68, 161, 238);
+  border-radius:3px;
+  padding: 8px;
+  font-size: 30px; 
+}
+.online_button.Offline.single {  
+  background-color: rgb(255, 255, 255);
+  border-radius:3px;
+  padding: 8px;
+  font-size: 30px; 
+}
+.online_button.Online.loop {
+  background-color: rgb(68, 161, 238);
+  border-radius: 0px 0px 0px 20px;
+  padding: 7px 20px 7px 30px;
+  font-size: 15px; 
+  float:right;
+}
+.online_button.Offline.loop {
+  background-color: rgb(255, 255, 255);
+  border-radius: 0px 0px 0px 20px;
+  padding: 7px 20px 7px 30px;
+  font-size: 15px; 
+  float:right;
+}
+.cek_running.loop { 
+  font-size: 15px; 
+  float:left;
+  color:#222222;
+  font-family:roboto;
+  font-weight: 500; 
+  padding: 7px 30px 7px 20px;
+}
+.cek_running.Scheduled.loop {
+  background-color: rgb(255, 230, 0);
+  border-radius: 0px 0px 20px 0px;
+
+}
+.cek_running.Running.loop {
+  background-color: rgb(0, 255, 106);
+  border-radius: 0px 0px 20px 0px;
+}
+.cek_running.Finished.loop {
+  background-color: rgb(236, 175, 156);
+  border-radius: 0px 0px 20px 0px;
+}
+
+#event_accordion ul,
+#event_accordion ol {
+  margin-left:20px;
+}
+
+table.cart tr th {
+    text-align: center;
+}
+table.cart tr th:first-child {
+    text-align: left !important;
+}
+
+table.detail-order {
+  border:none
+}
+table.detail-order tr td {
+  vertical-align:top;
+  border:none;
+}
+
+p.keranjang_belanja {
+  display:inline-block;
+    min-width:30px;
+    height:30px;
+    border:solid 1px #ccc;
+    vertical-align:top;
+    margin:10px;
+    text-align:center;
+    line-height:30px;
+    padding:2px;  
+}
+p.keranjang_belanja i {
+  font-size:10px;
+}
+
+[data-badge] {
+  position:relative; 
+}
+[data-badge]:after {
+    position:absolute;
+    right:-10px;
+    top:-10px;
+    min-width:10px;
+    min-height:10px;
+    line-height:10px;
+    padding:5px;
+    color:#fff;
+    background-color:#bf1f1f;
+    font-size:10px;
+    border-radius:20px;
+    content:attr(data-badge);
+    border:solid 1px #c93a3a;  
+}  
+
+/* form pendaftaran */
+.pendaftaran p {
+  color:#333333;
+}
+.pendaftaran a {
+  color:#3a8eee;
+}
+.pendaftaran a:hover {
+  color:#ee913a;
+}
+.pendaftaran table {
+  border:none;
+  padding:0;
+}
+.pendaftaran table td{
+  border:none;
+}
+.form-control {
+  width:100%;
+  border-radius:3px;
+  background-color: #ffffff;
+}
