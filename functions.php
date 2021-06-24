@@ -18,9 +18,9 @@ require_once('inc/midtrans-php/Midtrans.php');
 
 require 'update-checker/plugin-update-checker.php';
 $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-	'https://solusidesain-update-theme.netlify.app/scientina/theme.json',
-	__FILE__, //Full path to the main plugin file or functions.php.
-	'scientina'
+    'https://solusidesain-update-theme.netlify.app/scientina/theme.json',
+    __FILE__, //Full path to the main plugin file or functions.php.
+    'scientina'
 );
 
 if (!defined('WP_DEBUG')) {
@@ -264,7 +264,7 @@ function login()
         <a class="loginheader" href="<?php echo esc_url(wp_login_url()); ?>" alt="Login">
             Login
         </a>
-<?php }
+    <?php }
 }
 
 
@@ -281,7 +281,6 @@ function keranjang_belanja()
         echo '<a href="' . get_bloginfo('url') . '/keranjang"><p class="keranjang_belanja"><i data-feather="shopping-cart"></i></</p></a>';
     }
 
-
     echo '<script>
     feather.replace({width: "1em", height: "1em"});    
     </script>';
@@ -294,12 +293,17 @@ function bayar()
 {
     $user = wp_get_current_user();
 
+    $umeta = get_user_meta($user->ID, "telp", TRUE);
+
+    echo '<pre>';
+    print_r($umeta);
+    echo '</pre>';
+
     $training_id = isset($_GET['training_id']) ? $_GET['training_id'] : '';
 
-    
-
-
     if ($training_id != '') {
+
+        proses_bayar();
 
         //bikin session utk penamping training yg aktif utk proses pembayaran dan redirect after login
         $_SESSION["training_referer"] = $training_id;
@@ -317,7 +321,7 @@ function bayar()
         $cart .= "<tr>
             <td>" . $_SESSION["cart_item"][$training_id]["judul"] . "</td>
             <td style='text-align:right;'><span style='float:left;'>Rp</span> " . number_format($harga, 2) . "</td>
-            <td style='text-align:center;'><input style='width:50px;padding:2px;' type='number' name='jml_peserta' value='".$jml_peserta."'></td>
+            <td style='text-align:center;'><input style='width:50px;padding:2px;' type='number' name='jml_peserta' value='" . $jml_peserta . "'></td>
             <td style='text-align:right;'><span style='float:left;'>Rp</span> " . number_format($total_harga, 2) . "</td>           
             <tr>
         ";
@@ -338,10 +342,10 @@ function bayar()
 
             $cart .= "<input type='hidden' name='training_title' value='" . $_SESSION["cart_item"][$training_id]["judul"] . "'>";
             $cart .= "<input type='hidden' name='training_id' value='" . $training_id . "'>";
-            $cart .= "<input type='hidden' name='total_harga' value='".$total_harga."'>";
-            $cart .= "<input type='hidden' name='harga' value='".$harga."'>";
-            $cart .= "<input type='hidden' name='jml_peserta' value='".$jml_peserta."'>";
-      
+            $cart .= "<input type='hidden' name='total_harga' value='" . $total_harga . "'>";
+            $cart .= "<input type='hidden' name='harga' value='" . $harga . "'>";
+            $cart .= "<input type='hidden' name='jml_peserta' value='" . $jml_peserta . "'>";
+
 
             $cart .= "<input type='hidden' name='submitted' value='bayar'>
                                         <p><button type='submit' class='button button_checkout'>Lanjut</button></p>";
@@ -353,20 +357,41 @@ function bayar()
                     <td>
                         <h5><strong>Detail Tagihan</strong></h5>';
 
-
-
-
         if (is_user_logged_in()) {
             $cart .= '<p style="text-align:left;">Username: ' . $user->user_login . ' <p>';
             $cart .= '<p style="text-align:left;">Email: ' . $user->user_email . ' <p>';
+            $cart .= '<p style="text-align:left;">Telp/WA: ' . get_user_meta($user->ID, "telp", TRUE) . ' <p>';
         } else {
 
             $cart .= '<p style="text-align:center;"><a href="' . esc_url(wp_login_url(get_permalink() . '/?training_id=' . $_SESSION["training_referer"])) . '">Login disini </a>jika sudah terdaftar.</p>';
 
-            $cart .= "<form action='" . $url_checkout . "' method='post'>";
+            // show any error messages after form submission
+
+            echo '<pre>';
+            print_r(sctn_errors()->get_error_codes());
+            echo '</pre>';
+
+            if (sctn_errors()) {
+                echo "ada eror";
+            } else {
+                echo "gada eror";
+            }
+
+            $codes = sctn_errors()->get_error_codes();
+            if ($codes) {
+                $cart .= '<div class="sctn_errors">';
+                // Loop error codes and display errors
+                foreach ($codes as $code) {
+                    $message = sctn_errors()->get_error_message($code);
+                    $cart .= '<span class="error"><strong>' . __('Error') . '</strong>: ' . $message . '</span><br/>';
+                }
+                $cart .= '</div>';
+            }
+
+            $cart .= "<form action='' method='post'>";
             $cart .=  wp_nonce_field('post_nonce', 'post_nonce_field');
 
-            $cart .= ' <p><input type="text" class="form-control" name="username" id="username"  placeholder="Username *"></p>
+            $cart .= ' <p><input type="text" class="form-control" name="username" id="username"  placeholder="Username *" value=" "></p>
                         <p><input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap"  placeholder="Nama Lengkap *"></p>                       
                         <p><input type="text" class="form-control" name="email" id="email"  placeholder="E-mail *"></p>
                         <p><input type="password" class="form-control" name="password" id="password"  placeholder="Password *"></p>
@@ -377,7 +402,6 @@ function bayar()
                     <p><button type='submit' class='button button_checkout'>Buat Akun</button></p>";
             $cart .= "</form>";
         }
-
 
         $cart .= "</td></tr></table>";
         echo $cart;
@@ -396,7 +420,7 @@ function bayar()
 }
 
 /*-------- Tempat ----------*/
-add_shortcode('proses_bayar', 'proses_bayar');
+
 function proses_bayar()
 {
     $user = wp_get_current_user();
@@ -439,67 +463,65 @@ function proses_bayar()
             myEndSession();
 
             $wpdb = $GLOBALS['wpdb'];
-            $order = $wpdb->get_row("SELECT * FROM $wpdb->posts WHERE ID =" . $result , ARRAY_A);
-            $peserta = get_post_meta( $result, 'participant', false );
+            $order = $wpdb->get_row("SELECT * FROM $wpdb->posts WHERE ID =" . $result, ARRAY_A);
+            $peserta = get_post_meta($result, 'participant', false);
 
             $pst = '';
             foreach ($peserta[0] as $value) {
-                $peserta = get_post( $value);
-                $pst  .= '<li>'. $peserta->post_title . '</li> ';
-            } 
+                $peserta = get_post($value);
+                $pst  .= '<li>' . $peserta->post_title . '</li> ';
+            }
 
             \Midtrans\Config::$serverKey = 'SB-Mid-server-nfg_ilmmRSPvnW3RSa_DymDW';
             \Midtrans\Config::$isSanitized = true;
-            \Midtrans\Config::$is3ds = true;             
+            \Midtrans\Config::$is3ds = true;
 
-            $jml_peserta = get_post_meta( $result, 'jml_peserta', true );
-            $harga = get_post_meta( $result, 'harga', true );
+            $jml_peserta = get_post_meta($result, 'jml_peserta', true);
+            $harga = get_post_meta($result, 'harga', true);
 
             $transaction_details = array(
                 'order_id' => rand(),
                 'gross_amount' => $harga,
             );
-            
+
             $item_details = array(
                 'id' => $post_id,
                 'price' => $harga,
                 'quantity' => $jml_peserta,
-                'name'=> $order["post_title"]
+                'name' => $order["post_title"]
             );
-            
-            $item_details = array($item_details);           
-            
+
+            $item_details = array($item_details);
+
             $customer_details = array(
                 'first_name' => $user->display_name,
-                'last_name' =>'',
+                'last_name' => '',
                 'email' => $user->user_email,
                 'phone' => '08562563456',
                 'billing_address' => '',
                 'shipping_address' => ''
             );
-            
+
             $enable_payments = array('mandiri_clickpay', 'credit_card');
-            
+
             $transaction = array(
                 'enabled_payments' => $enable_payments,
                 'transaction_details' => $transaction_details,
                 'customer_details' => $customer_details,
                 'item_details' => $item_details
             );
-            
-            $snapToken = \Midtrans\Snap::getSnapToken($transaction);          
-           
-            
-            
+
+            $snapToken = \Midtrans\Snap::getSnapToken($transaction);
+
             $cart = '';
 
             $cart .= '<h5><strong>Pesanan Anda</strong></h5>';
-    
+
             $cart .= "<table class='cart'><thead><tr><th>Training</th><th>Nama Peserta</th><th>Total</th><th>&nbsp;</th><tr></thead>";
             $cart .= "<tr>       
-                <td>". $order["post_title"]. "</td>
-                <td><ol>" . $pst ."</ol></td>
-                <td style='text-align:right;'><span style='float:left;'>Rp</span> " . number_format(get_post_meta( $result, 'total_harga', true ),2) . " </td>     
+                <td>" . $order["post_title"] . "</td>
+                <td><ol>" . $pst . "</ol></td>
+                <td style='text-align:right;'><span style='float:left;'>Rp</span> " . number_format(get_post_meta($result, 'total_harga', true), 2) . " </td>     
                 <td style='text-align:center;'><button id='pay-button' style='background:#f4511e; border-radius:5px;'>Bayar</button></td>      
                 <tr>
             ";
@@ -510,9 +532,9 @@ function proses_bayar()
             $cart .= '
             <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-NUHDTW6uipcvE7sz"> </script>
             <script
-  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
-  integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
-  crossorigin="anonymous"></script>
+            src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+            crossorigin="anonymous"></script>
             <script type="text/javascript"> 
                 $("#pay-button").on("click", function() {                 
                     snap.pay("' . $snapToken . '", {
@@ -530,39 +552,108 @@ function proses_bayar()
             </script>';
 
             echo $cart;
-            
         } elseif ($_POST['submitted'] == 'daftar') {
 
+            $username = $_POST['username'];
+            $email = $_POST['email'];
+            $password = $_POST['password'];
+            $nama_lengkap = $_POST['nama_lengkap'];
+
+            // // this is required for username checks
+            // require_once(ABSPATH . WPINC . '/registration.php');
+
+            if (username_exists($username)) {
+                // Username already registered
+                sctn_errors()->add('username_unavailable', __('Username sudah terdaftar'));
+            }
+
+            if (!validate_username($username)) {
+                // invalid username
+                sctn_errors()->add('username_invalid', __('Username tidak valid'));
+            }
+
+            if ($username == '') {
+                // empty username
+                sctn_errors()->add('username_empty', __('Masukkan username'));
+            }
+
+            if ($nama_lengkap == '') {
+                // empty username
+                sctn_errors()->add('nama_lengkap_empty', __('Nama lengkap harus diisi'));
+            }
+
+            if (!is_email($email)) {
+                //invalid email
+                sctn_errors()->add('email_invalid', __('Email tidak valid'));
+            }
+            if (email_exists($email)) {
+                //Email address already registered
+                sctn_errors()->add('email_used', __('Email sudah terdaftar'));
+            }
+            if ($password == '') {
+                // passwords do not match
+                sctn_errors()->add('password_empty', __('Masukkan password'));
+            }
+
             $userdata = array(
-                'user_login' =>  sanitize_text_field($_POST['username']),
-                'user_email'   =>  sanitize_text_field($_POST['email']),
-                'user_pass'   =>  sanitize_text_field($_POST['password']),
-                'display_name'   =>  sanitize_text_field($_POST['nama_lengkap']),
-                'user_firstname'   =>  sanitize_text_field($_POST['nama_lengkap']),
+                'user_login'        => sanitize_text_field($username),
+                'user_email'        => sanitize_text_field($email),
+                'user_pass'         => $password,
+                'display_name'      => sanitize_text_field($nama_lengkap),
+                'user_firstname'    => sanitize_text_field($nama_lengkap),
+                'user_registered'    => date('Y-m-d H:i:s'),
+                'role'                => 'subscriber'
             );
 
-            $user_id = wp_insert_user($userdata);
+            $errors = sctn_errors()->get_error_messages();
 
-            automatically_log_me_in($user_id);
+            // if no errors then cretate user
+            if (empty($errors)) {
+
+                $user_id = wp_insert_user($userdata);
+
+                if ($user_id) {
+                    //add user meta telp
+                    add_user_meta($user_id, 'telp', sanitize_text_field($_POST['telp']));
+
+                    // send an email to the admin
+                    wp_new_user_notification($user_id);
+
+                    //ambil session untuk back to page bayar
+                    $training_ref = $_SESSION['training_referer'];
+
+                    wp_set_current_user($user_id);
+                    wp_set_auth_cookie($user_id);
+
+                    //redirect ke page bayar
+                    wp_redirect(home_url('/bayar/?training_id=' . $training_ref));
+                    exit();
+                }
+            }
         } else {
             echo "balikin ke keranjang";
         }
-
-
     }
 }
 
-function automatically_log_me_in($user_id)
+// used for tracking error messages
+function sctn_errors()
+{
+    static $wp_error; // global variable handle
+    return isset($wp_error) ? $wp_error : ($wp_error = new WP_Error(null, null, null));
+}
+
+function set_value($field_name)
 {
 
-    $training_id = $_SESSION['training_id'];
-
-    wp_set_current_user($user_id);
-    wp_set_auth_cookie($user_id);
-    wp_redirect(home_url('/bayar/?training_id=' . $training_id));
-    exit();
+    if (isset($_POST[$field_name])) {
+        $value = $_POST[$field_name];
+    } else {
+        $value = '';
+    }
+    return $value;
 }
-add_action('user_register', 'automatically_log_me_in');
+
 
 /*-------- Tempat ----------*/
 add_shortcode('tempat', 'tempat');
@@ -704,3 +795,54 @@ function add_to_cart()
         echo "</ol>";
     }
 }
+
+add_action('admin_init', 'my_remove_menu_pages');
+function my_remove_menu_pages()
+{
+    global $user_ID;
+
+    if (!current_user_can('activate_plugins')) {
+        remove_menu_page('themes.php');                 //Appearance  
+        remove_menu_page('plugins.php');                //Plugins  
+        remove_menu_page('users.php');                  //Users  
+        remove_menu_page('tools.php');                  //Tools  
+        remove_menu_page('options-general.php');        //Settings  
+        remove_menu_page('upload.php');
+        remove_menu_page('edit.php?post_type=elementor_library');
+        remove_menu_page('edit-comments.php');
+        remove_menu_page('edit.php?post_type=page');
+        remove_menu_page('profile.php');
+    }
+}
+
+function remove_dashboard_meta()
+{
+    remove_meta_box('dashboard_incoming_links', 'dashboard', 'normal');
+    remove_meta_box('dashboard_plugins', 'dashboard', 'normal');
+    remove_meta_box('dashboard_primary', 'dashboard', 'side');
+    remove_meta_box('dashboard_secondary', 'dashboard', 'normal');
+    remove_meta_box('dashboard_quick_press', 'dashboard', 'side');
+    remove_meta_box('dashboard_recent_drafts', 'dashboard', 'side');
+    remove_meta_box('dashboard_recent_comments', 'dashboard', 'normal');
+    remove_meta_box('dashboard_right_now', 'dashboard', 'normal');
+    remove_meta_box('dashboard_activity', 'dashboard', 'normal'); //since 3.8
+    remove_meta_box('e-dashboard-overview', 'dashboard', 'normal');
+}
+add_action('admin_init', 'remove_dashboard_meta');
+
+function add_dashboard_widget()
+{
+    wp_add_dashboard_widget("rss-feed", "Admin Scientina", "display_rss_dashboard_widget");
+}
+
+function display_rss_dashboard_widget()
+{ ?>
+
+    <h1>Selamat Datang di Scientinaskill.com</h1>
+    <p>Halaman ini merupakan halaman admin</p>
+    
+
+<?php
+}
+
+add_action("wp_dashboard_setup", "add_dashboard_widget");

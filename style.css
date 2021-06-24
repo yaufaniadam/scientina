@@ -254,3 +254,12 @@ p.keranjang_belanja i {
   border-radius:3px;
   background-color: #ffffff;
 }
+
+.sctn_errors {
+  padding:15px;
+  background:#f1d9d9;
+  border: 1px solid #c93a3a;
+  border-radius:5px;
+  color:#333333;
+  margin-bottom:30px;
+}
