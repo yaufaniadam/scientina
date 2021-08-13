@@ -12,6 +12,13 @@
 
 ====================================================================================== */
 
+
+html, body {
+  background-color: #286d64;
+}
+.separate-containers .inside-article, .separate-containers .comments-area, .separate-containers .page-header, .one-container .container, .separate-containers .paging-navigation, .inside-page-header {
+  background-color: #286d64;
+}
 /* ---- Ultimate Membership ---- */
 
 .um .um-field-label, .um-field-checkbox-state i, .um-field-radio-state i, .um-field-checkbox-option, .um-field-radio-option,
@@ -36,15 +43,17 @@ a.um-link-alt {
 .button.button_beli {
   background-color: #f4511e;  
   color: #FFFFFF; 
-  font-size: 28px;
-  padding: 20px; 
-  margin: 5px;
+  font-size: 20px;
+  padding: 10px 20px; 
+  margin: 5px 0;
+  width: auto;
 }
 .button.button_checkout {
   background-color: #f4511e;  
   color: #FFFFFF; 
   font-size: 18px;
   padding: 10px; 
+  width:200px;
 }
 
 .button_checkout.disabled {
@@ -90,13 +99,20 @@ h2.elementor-heading-title {
   color:#ffffff;
 }
 
+h2.judul-shortcode {
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.6em;
+  color:#ffffff;
+}
+
 ol.trainer {
   margin-left:20px;
-  margin-bottom:0;
+  margin-bottom:15px;
 }
 
 ol.trainer li {
-  font-size: 21px;
+  font-size: 18px;
   font-weight: 300;
   color:#ffffff;
 }
@@ -251,8 +267,14 @@ p.keranjang_belanja i {
 }
 .form-control {
   width:100%;
-  border-radius:3px;
-  background-color: #ffffff;
+  border-radius:4px !important;
+  background-color: #357773;
+  margin-bottom:6px;
+}
+
+.form-control.disabled {
+  background-color: rgba(255,255,255,0.1);
+  color:#fff;
 }
 
 .sctn_errors {
@@ -262,4 +284,40 @@ p.keranjang_belanja i {
   border-radius:5px;
   color:#333333;
   margin-bottom:30px;
+}
+
+
+  @media (max-width: 700px) {
+    .button.button_beli {
+        margin-bottom: 10px;
+        padding:10px;
+        box-sizing: border-box;
+        font-size: 18px;
+        margin-left:10px;
+        margin-right:10px;
+        width:96%;
+    }
+
+    .online_button.Online.single {
+      padding: 2px 5px 0px;
+      font-size: 16px; 
+      text-transform: uppercase;
+    }
+    .online_button.Offline.single { 
+      font-size: 16px; 
+      padding: 2px 5px 0px;
+      text-transform: uppercase;
+    }
+
+    #jml_peserta {
+      width:100%;
+    }
+
+    form.pendaftaran p {
+      margin-bottom:4px;
+    }
+
+    .kolom-kiri {
+      display: none;
+    }
 }
