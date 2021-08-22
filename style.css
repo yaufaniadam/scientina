@@ -22,10 +22,13 @@ html, body {
 /* ---- Ultimate Membership ---- */
 
 
+.form-group.row {
+  margin-bottom:6px;
+}
 
 
 /* ------ button ----- */
-.button {
+/* .button {
   border-radius: 4px;
   border: none;
   text-align: center;
@@ -40,7 +43,7 @@ html, body {
   padding: 10px 20px; 
   margin: 5px 0;
   width: auto;
-}
+} */
 .button.button_checkout {
   background-color: #f4511e;  
   color: #FFFFFF; 
@@ -59,7 +62,7 @@ html, body {
   font-size: 14px;
   font-family: "roboto";
 }
-
+/* 
 .button span {
   cursor: pointer;
   display: inline-block;
@@ -78,12 +81,12 @@ html, body {
 
 .button:hover span {
   padding-right: 25px;
-}
+} 
 
 .button:hover span:after {
   opacity: 1;
   right: 0;
-}
+}*/
 
 /* harga */
 h2.elementor-heading-title {
@@ -307,14 +310,14 @@ p.keranjang_belanja i {
 }
 
 
-form .error {
+/* form .error {
   color:#ffcd5d;
   font-size: 14px;
-}
+} */
 
-form .form-control.field-error {
+/* form .form-control.field-error {
   border:2px solid #ff0000;
-}
+} */
 
 .form_checkout strike .harga_asli {
   position:relative;
