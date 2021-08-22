@@ -6,7 +6,6 @@
 * Author URI: https://solusidesain.net
 * Description: Theme for Scientina Skill
 * Version: 1.0.3
-* Template: generatepress
 * License: GNU General Public License version 3.0
 * License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -320,4 +319,34 @@ p.keranjang_belanja i {
     .kolom-kiri {
       display: none;
     }
+}
+
+
+form .error {
+  color:#ffcd5d;
+  font-size: 14px;
+}
+
+form .form-control.field-error {
+  border:2px solid #ff0000;
+}
+
+.form_checkout strike .harga_asli {
+  position:relative;
+  color:#f2f2f2;
+  display: inline-block;
+}
+
+.form_checkout strike .tru {
+  position:absolute;
+  left:0;
+  width:100%;
+  height:2px;
+  background: red;
+  /* position of strike through from top */
+  top:40%;
+}
+
+#bayar-midtrans, #loading {
+  display: none;
 }

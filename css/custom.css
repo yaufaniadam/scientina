@@ -1,0 +1,250 @@
+/* 
+
+1. Add your custom Css styles below
+2. Place the this code in your template: 
+
+ <link href="css/custom.css" rel="stylesheet">
+
+*/
+
+/*Theme Name: Lab IP
+Text Domain: Lab IP
+Version: 1.0
+Description: Template Untuk Lab IP UMY
+Author: Hafizh Pratama
+*/
+
+.text-black {
+    color: #3d3d3d;
+}
+
+.container p a {
+    color:#c00000;
+    text-decoration:underline;
+}
+
+input:not([type="checkbox"]):not([type="radio"]), select {
+    line-height: 18px;
+    padding: 10px 16px;
+    min-height: 40px;
+    font-size: .9rem;
+}
+
+.wpcf7-textarea {
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.wpcf7 input {
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.wpcf7-submit {
+    border: none!important;
+    font-family: "Poppins", sans-serif;
+    border-radius: 5px 5px 5px 5px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    text-decoration: none;
+    outline: none;
+    padding: 12px 18px;
+    position: relative;
+    text-transform: uppercase;
+    background-color: #FFB848;
+    border-color: #FFB848;
+    border-width: 1px;
+    border-style: solid;
+    color: #ffffff;
+    transition: all 0.3s;
+    margin-bottom: 6px;
+    outline: none;
+    line-height: 14px;
+    cursor: pointer;
+}
+
+.layanan-tabs {
+     top: 0px;
+}
+
+.animated.fadeInUp.visible h4 {
+    font-weight: 500;
+}
+
+.text-black p{
+    color: #3d3d3d!important;
+}
+
+@media (max-width: 1024px) {
+   
+    .tabs.tabs-vertical .nav-tabs .nav-link{
+        width: 100%;
+    }
+    .heading-text.heading-section h3:before {
+        display: none;
+    }
+    .layanan-tabs {
+        left: 0px!important;
+        top: 0px!important;
+    }
+}
+
+/* Add indicator arrow for the active tab */
+
+.nav-pills-custom .nav-link {
+    color: #aaa;
+    background: #fff;
+    position: relative;
+}
+
+/* Add indicator arrow for the active tab */
+
+@media (min-width: 992px) {
+    .nav-pills-custom .nav-link::before {
+        content: '';
+        display: block;
+        border-top: 35px solid transparent;
+        border-left: 10px solid #FEBD0E;
+        border-bottom: 35px solid transparent;
+        position: absolute;
+        top: 50%;
+        right: -12px;
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+}
+
+.nav-pills-custom .nav-link.active::before {
+    opacity: 1;
+}
+
+.container-slider-text {
+    height:100%;    
+}
+
+.slider-text {
+    text-align:center;
+    margin-top: 8vh;
+}
+
+.slider-text.search{
+    text-align:center;
+    margin-top: -15px;
+}
+
+.slider-text h2 {
+    color:#fff;
+    line-height:1.1em;
+    font-size: 60px;
+    font-weight: normal;
+}
+.slider-text p {
+    color:#fff;
+    font-family: poppins;
+    font-weight: 400;
+    font-size: 36px;
+}
+.slider-text.dark h2,
+.slider-text.dark p {
+    color:rgb(0, 0, 0);
+}
+
+.front-search {
+    background-color: white;
+    border-radius: 10px;
+    padding:10px 10px 4px 20px;
+    margin-left:100px;
+    margin-right: 100px;
+    box-shadow: 0px 0px 23px -10px rgba(0, 0, 0, 0.58);
+}
+
+.front-search input[type="text"] {
+    width:100%;
+    padding: 30px 0px 18px;
+    font-size: 20px;
+    border:none;
+}
+.front-search input[type="submit"] {
+    width:100%;
+    padding: 32px 0px;
+    background-color: #F3722C;
+}
+
+.front-search .form-control:focus {
+    box-shadow: none;
+}
+.bg-white-9 {
+    background-color:rgba(255,255,255,0.9);
+}
+
+
+@media (max-width: 700px) {
+    .slider-text {
+        color:#fff;
+        width:100%;
+        padding:0 30px;
+    }
+    .slider-text h2 {
+        font-size: 30px;
+    }
+    .slider-text p {
+        font-size: 14px;
+    }
+}
+
+@-webkit-keyframes autofill {
+    to {
+        color: #fff;
+        background: transparent;
+    }
+}
+
+
+.post-item-description img.alignleft,
+.post-item-description div.wp-caption.alignleft {
+    float: left;
+    margin: 0 20px 0px 0;
+}
+.post-item-description img.alignright,
+.post-item-description div.wp-caption.alignright {
+    float: right;
+    margin: 0px 0px 0px 20px;
+}
+.post-item-description img.alignnone,
+.post-item-description div.wp-caption.alignnone {
+   width:auto;
+   display: block;
+   margin: 20px 0;
+}
+.post-item-description img.aligncenter,
+.post-item-description div.wp-caption.aligncenter {
+   width:auto;
+   display: block;
+   margin: 20px auto;
+}
+.post-item-description p.wp-caption-text {
+    font-size: 14px !important;
+    color:#9b9b9b;
+    padding:10px 0;
+    font-style: italic;
+}
+
+
+.etn-event-single-wrap, .etn-es-events-page-container  {
+    background:#212121
+}
+
+.etn-event-tag-list a {
+    color :#eaeaea
+}
+
+.etn-event-tag-list a:hover  {
+    border-color: #eaeaea;
+}
+.etn-event-single-content-wrap .etn-event-entry-title {
+    font-size:26px;
+}
+
