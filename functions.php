@@ -27,26 +27,6 @@ if (!defined('WP_DEBUG')) {
     die('Direct access forbidden.');
 }
 
-
-// add_action('admin_init', 'my_remove_menu_pages');
-// function my_remove_menu_pages()
-// {
-//     global $user_ID;
-
-//     if (!current_user_can('activate_plugins')) {
-//         // remove_menu_page('themes.php');                 //Appearance  
-//         // remove_menu_page('plugins.php');                //Plugins  
-//         // remove_menu_page('users.php');                  //Users  
-//         // remove_menu_page('tools.php');                  //Tools  
-//         // remove_menu_page('options-general.php');        //Settings  
-//         // remove_menu_page('upload.php');
-//         // remove_menu_page('edit.php?post_type=elementor_library');
-//         // remove_menu_page('edit-comments.php');
-//         // remove_menu_page('edit.php?post_type=page');
-//         // remove_menu_page('profile.php');
-//     }
-// }
-
 function remove_dashboard_meta()
 {
     remove_meta_box('dashboard_incoming_links', 'dashboard', 'normal');
@@ -83,18 +63,10 @@ add_action('wp_enqueue_scripts', 'sctn_child_enqueue_styles', 99);
 function sctn_child_enqueue_styles()
 {
     // CSS
-    wp_enqueue_style('parent-style', get_stylesheet_directory_uri() . '/style.css');
-    wp_enqueue_style('simple-grid', get_stylesheet_directory_uri() . '/css/grid/simple-grid.min.css');
-
-    // JS
-    wp_enqueue_script('feather', 'https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js');
-    wp_enqueue_script('custom', get_stylesheet_directory_uri() . '/js/custom.js');  
-   
-}
-
-add_action( 'admin_enqueue_scripts', 'my_admin_style');
-function my_admin_style() {
-    wp_enqueue_style('simple-grid', get_stylesheet_directory_uri() . '/css/grid/simple-grid.min.css');
+    wp_enqueue_style('style', get_stylesheet_directory_uri() . '/style.css');
+    wp_enqueue_style('bs-css', get_template_directory_uri() . '/css/bootstrap.min.css');
+    //JS
+    wp_enqueue_script('bs-js', get_template_directory_uri() . '/js/bootstrap.min.js');     
 }
 
 add_action('after_setup_theme', 'remove_admin_bar');

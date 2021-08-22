@@ -11,23 +11,17 @@
 
 ====================================================================================== */
 
-
 html, body {
   background-color: #286d64;
+  padding:0;
+  margin:0;
 }
 .separate-containers .inside-article, .separate-containers .comments-area, .separate-containers .page-header, .one-container .container, .separate-containers .paging-navigation, .inside-page-header {
   background-color: #286d64;
 }
 /* ---- Ultimate Membership ---- */
 
-.um .um-field-label, .um-field-checkbox-state i, .um-field-radio-state i, .um-field-checkbox-option, .um-field-radio-option,
-a.um-link-alt {
-  color: #fff  !important;
-}
 
-.um-left input[type=submit].um-button  {
-  background-color: #f5a811 !important;
-}
 
 
 /* ------ button ----- */
@@ -264,17 +258,8 @@ p.keranjang_belanja i {
 .pendaftaran table td{
   border:none;
 }
-.form-control {
-  width:100%;
-  border-radius:4px !important;
-  background-color: #357773;
-  margin-bottom:6px;
-}
 
-.form-control.disabled {
-  background-color: rgba(255,255,255,0.1);
-  color:#fff;
-}
+
 
 .sctn_errors {
   padding:15px;
