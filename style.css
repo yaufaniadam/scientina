@@ -246,7 +246,7 @@ p.keranjang_belanja i {
 
 /* form pendaftaran */
 .pendaftaran p {
-  color:#333333;
+  color:#ffffff;
 }
 .pendaftaran a {
   color:#3a8eee;
@@ -262,8 +262,6 @@ p.keranjang_belanja i {
   border:none;
 }
 
-
-
 .sctn_errors {
   padding:15px;
   background:#f1d9d9;
@@ -272,7 +270,6 @@ p.keranjang_belanja i {
   color:#333333;
   margin-bottom:30px;
 }
-
 
   @media (max-width: 700px) {
     .button.button_beli {
@@ -335,6 +332,6 @@ p.keranjang_belanja i {
   top:40%;
 }
 
-#bayar-midtrans, #loading {
+#bayar-midtrans, #loading, #daftar_berhasil, #daftar_error {
   display: none;
 }
