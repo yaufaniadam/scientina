@@ -15,6 +15,7 @@ function myEndSession()
     unset($_SESSION["cart_item"]);
 }
 
+require('inc/scientina-training/scientina-training.php');
 
 require 'update-checker/plugin-update-checker.php';
 $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
