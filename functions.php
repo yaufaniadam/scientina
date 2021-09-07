@@ -88,3 +88,112 @@ function add_custom_query_vars_filter($vars)
     return $vars;
 }
 add_filter('query_vars', 'add_custom_query_vars_filter');
+
+
+add_action("manage_orders_posts_custom_column",  "orders_custom_columns");
+add_filter("manage_edit-orders_columns", "orders_edit_columns");
+
+function orders_edit_columns($columns){
+  $columns = array(
+    "cb" => "<input type=\"checkbox\" />",
+    "title" => "Training",
+    "user" => "Registran",
+    "peserta" => "Peserta",
+    "status" => "Status",
+    "jumlah_bayar" => "Jumlah Bayar",
+  );
+
+  return $columns;
+}
+function orders_custom_columns($column){
+  global $post;
+
+  switch ($column) {
+    case "user":
+        the_author();
+      break;
+    case "peserta":
+
+        $peserta = get_post_meta($post->ID, 'participant', true);
+
+        if($peserta) {
+          foreach ($peserta as $peserta) {
+            echo "<a href='" . get_edit_post_link(get_post($peserta)->ID) . "'>" . get_post($peserta)->post_title ."</a>, ";
+           
+          }
+        }
+
+      break;
+    case "status":
+      $status = get_post_meta($post->ID, 'status_bayar', true);
+      echo ($status == 'belum_bayar') ? 'Menunggu Pembayaran' : (($status == 'tambah_peserta') ? 'Belum Lengkap' : 'Lunas') ;
+      break;
+    case "jumlah_bayar":
+      $jumlah_bayar = get_post_meta($post->ID, 'jumlah_bayar', true);
+      if($jumlah_bayar) {
+        echo "Rp" . number_format($jumlah_bayar);
+      }     
+      break;
+  }
+}
+
+
+add_action("manage_training_posts_custom_column",  "training_custom_columns");
+add_filter("manage_edit-training_columns", "training_edit_columns");
+
+function training_edit_columns($columns){
+  $columns = array(
+    "cb" => "<input type=\"checkbox\" />",
+    "title" => "Training",
+    "trainer" => "Trainer",
+    "tanggal" => "Tanggal",
+    "tempat" => "Tempat",
+    "harga" => "Harga",
+    "running" => "Running",
+    "online" => "Online",
+  );
+
+  return $columns;
+}
+function training_custom_columns($column){
+  global $post;
+
+  switch ($column) {
+    case "trainer":
+      $trainer = get_post_meta($post->ID, 'trainer', true);
+
+      if($trainer) {
+        foreach ($trainer as $trainer) {
+          echo "<a href='" . get_edit_post_link(get_post($trainer)->ID) . "'>" . get_post($trainer)->post_title ."</a>, ";
+         
+        }
+      }
+      break;
+      case "tanggal":
+        echo get_post_meta($post->ID, 'tanggal_mulai', true);
+        echo " - ";
+        echo get_post_meta($post->ID, 'tanggal_selesai', true);
+      break;
+      case "tempat":
+
+        echo get_post_meta($post->ID, 'tempat', true) . " ";
+        echo get_post_meta($post->ID, 'kota', true);
+      break;
+      case "harga":
+        echo "Rp" . number_format(get_post_meta($post->ID, 'harga', true));
+      break;
+      case "running":
+        $running = get_post_meta($post->ID, 'running', true);     
+        echo ($running) ? "Running" : "";
+
+      break;
+      case "online":
+        $online = get_post_meta($post->ID, 'online', true);     
+        
+        echo $online[0];
+     
+
+      break;
+   
+  }
+}

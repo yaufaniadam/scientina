@@ -5,7 +5,7 @@
 * Author: Yaufani Adam
 * Author URI: https://solusidesain.net
 * Description: Theme for Scientina Skill
-* Version: 1.0.3
+* Version: 1.0.4
 * License: GNU General Public License version 3.0
 * License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -249,10 +249,10 @@ p.keranjang_belanja i {
   color:#ffffff;
 }
 .pendaftaran a {
-  color:#3a8eee;
+  color:#f5ee12;
 }
 .pendaftaran a:hover {
-  color:#ee913a;
+  color:#daaf12;
 }
 .pendaftaran table {
   border:none;
@@ -277,8 +277,6 @@ p.keranjang_belanja i {
         padding:10px;
         box-sizing: border-box;
         font-size: 18px;
-        margin-left:10px;
-        margin-right:10px;
         width:96%;
     }
 
@@ -316,13 +314,14 @@ p.keranjang_belanja i {
   border:2px solid #ff0000;
 } */
 
-.form_checkout strike .harga_asli {
+.form_checkout .harga_asli {
   position:relative;
   color:#f2f2f2;
   display: inline-block;
 }
 
-.form_checkout strike .tru {
+.form_checkout .tru {
+  display: none;
   position:absolute;
   left:0;
   width:100%;
