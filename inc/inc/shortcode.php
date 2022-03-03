@@ -5,9 +5,7 @@
 add_shortcode('button_beli', 'button_beli');
 function button_beli()
 {
-    $post_id = get_the_ID();
-
-    $status_transaksi = status_transaksi(get_current_user_id(), $post_id);
+    $post_id = get_the_ID();  
 
     $url = '';
     $form = '';  
@@ -15,12 +13,39 @@ function button_beli()
 
     if (!is_user_logged_in()) { 
 
-        $form .= '<div id="load" class="p-2">
+        $form .= '<h5 class="text-center">Beli Program Ini</h5>
+        
+        <ul class="my-4 nav nav-pills d-flex justify-content-center">
+        <li class="nav-item">
+          <a class="nav-link aktif text-center" aria-current="page" href="#">
+          <span class="badge rounded-pill">1</span><br>
+          Buat Akun</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-center" aria-current="page" href="#">
+            <span class="badge rounded-pill">2</span><br>
+            Tambah Peserta</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-center" aria-current="page" href="#">
+            <span class="badge rounded-pill">3</span><br>
+            Bayar</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-center" aria-current="page" href="#">
+            <span class="badge rounded-pill">4</span><br>
+            Selesai</a>
+        </li>
+        
+      </ul>';
+
+        $form .= '<div id="load">
+        
         <form action="' . $url . '" method="POST" class="pendaftaran p-3">
-        <h5 class="text-center">Beli Program Ini</h5>
+        
         <input type="hidden" name="url" id="url" class="" value="'. get_the_permalink() .'">';
 
-        $form .= '<p style="text-align:center;"><a href="' . esc_url(wp_login_url(get_permalink() . '/?training_id='.  get_the_ID())) . '">Login disini </a>jika sudah terdaftar.</p>';
+        $form .= '<p style="text-align:center;"><a href="' . esc_url(wp_login_url(get_permalink())) . '">Login disini </a>jika sudah terdaftar.</p>';
 
         $form .= "<div id='daftar_error'><span class='alert alert-danger d-block'>Error! Periksa kembali.</span></div>";
         
@@ -64,7 +89,7 @@ function button_beli()
                     <button type="submit" class="btn btn-warning btn-md button button_beli" id="daftar">
                         <span class="spinner-border text-light spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                         <span class="visually-hidden">Loading...</span>
-                        Beli Program                
+                        Selanjutnya <i class="fas fa-arrow-right"></i>               
                     </button> 
                     </div>
                 </div>'; 
@@ -74,15 +99,44 @@ function button_beli()
 
         $form .= "</div>";
 
-    } else {
+    } else {       
 
         // dia login
-        // cek status transaksi, jika ada transaksi, maka jalankan transaksi
-        
+        // cek status transaksi dari user yg login ini, jika ada transaksi, maka jalankan transaksi
+        $status_transaksi = status_transaksi(get_current_user_id(), $post_id);
+
         if($status_transaksi == 0) {
-            $form .= '<div id="load">
-            <form action="' . $url . '" method="POST" class="pendaftaran p-3">
-            <h5 class="text-center">Beli Program Ini</h5>
+            $form .= '<h5 class="text-center">Beli Program Inie</h5>
+            
+            <ul class="my-4 nav nav-pills d-flex justify-content-center">
+               
+                <li class="nav-item">
+                    <a class="nav-link aktif text-center" aria-current="page" href="#">
+                    <span class="badge rounded-pill">1</span><br>
+                    Mulai</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-center" aria-current="page" href="#">
+                    <span class="badge rounded-pill">2</span><br>
+                    Tambah Peserta</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-center" aria-current="page" href="#">
+                    <span class="badge rounded-pill">3</span><br>
+                    Bayar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-center" aria-current="page" href="#">
+                    <span class="badge rounded-pill">4</span><br>
+                    Selesai</a>
+                </li>
+                
+            </ul>';
+     
+            $form .= '<div id="load" class="p-2">
+
+            <form action="' . $url . '" method="POST" class="pendaftaran">
+            
             <input type="hidden" name="url" id="url" class="" value="'. get_the_permalink() .'">';
             $form .= "<input type='hidden' name='submitted' value='add'>"; 
 
@@ -91,7 +145,7 @@ function button_beli()
             <div class="col-sm-8">
                 <input type="number" name="jml_peserta" id="jml_peserta" class="form-control" value="1" min="1" value="1">
             </div>
-        </div>';   
+            </div>';   
  
             $form .= '<input type="hidden" name="harga" id="harga" value="' . get_field('harga', get_the_ID()) . '" />';
             $form .= '<input type="hidden" name="post_id" id="post_id" value="' . get_the_ID() . '" />'; 
@@ -102,19 +156,18 @@ function button_beli()
                         <button type="submit" class="btn btn-warning btn-md button button_beli" id="daftar">
                             <span class="spinner-border text-light spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                             <span class="visually-hidden">Loading...</span>
-                            Beli Program                
+                            Selanjutnya <i class="fas fa-arrow-right"></i>                
                         </button> 
                         </div>
                     </div>'; 
             $form .= "<p class='tampil-data text-white'>* Wajib diisi</p>
             </form>
             ";
-            $form .= "</div>";
+            $form .= "</div> "; //#load close
+
         } else {
 
-            
-            foreach ($status_transaksi as $post) {  
-               
+            foreach ($status_transaksi as $post) { 
                 $jml_peserta = get_field('jml_peserta', $post->ID);  
                 $total_harga = get_field('total_harga', $post->ID);  
                 $total_bayar = get_field('total_bayar', $post->ID);  
@@ -123,17 +176,44 @@ function button_beli()
     
                 $nonce = wp_create_nonce( 'scajax_nonce' );
                 // $total_harga = $field["harga"]*$field["jml_peserta"];
-                $html = '';               
+                $html = '';    
+
 
                 if($status_pendaftaran == 'awal') {
-                    $html .= '<div id="load" class="p-3"><h5 class="text-center mb-3">Selesaikan Pesanan Anda</h5>';
-                    // $html .= "<p>Masukkan Nama Peserta</p>";
-                    $html .=  '<form action="" method="POST" class="form_checkout">';
-                    $html .=  '<input type="hidden" name="nonce" value="'. $nonce .'">';
-                    $html .=  '<input type="hidden" name="total_harga" id="total_harga" value="'. $total_harga .'">';
-                    $html .=  '<input type="hidden" name="jml_peserta" id="jml_peserta" value="'. $jml_peserta .'">';
+
+                    $form .= '<h5 class="text-center">Beli Program Ini</h5>';
+                    $form .= '                    
+                    <ul class="my-4 nav nav-pills d-flex justify-content-center">
+                        <li class="nav-item">
+                        <a class="nav-link text-center" aria-current="page" href="#">
+                        <span class="badge rounded-pill">1</span><br>
+                        Mulai</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link aktif text-center" aria-current="page" href="#">
+                            <span class="badge rounded-pill">2</span><br>
+                            Tambah Peserta</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-center" aria-current="page" href="#">
+                            <span class="badge rounded-pill">3</span><br>
+                            Bayar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-center" aria-current="page" href="#">
+                            <span class="badge rounded-pill">4</span><br>
+                            Selesai</a>
+                        </li>
+                        
+                    </ul>';
+
+                    $form .=  '<div id="load" class="p-2">
+                    <form action="" method="POST" class="form_checkout">';
+                    $form .=  '<input type="hidden" name="nonce" value="'. $nonce .'">';
+                    $form .=  '<input type="hidden" name="total_harga" id="total_harga" value="'. $total_harga .'">';
+                    $form .=  '<input type="hidden" name="jml_peserta" id="jml_peserta" value="'. $jml_peserta .'">';
                     for ($i = 1; $i <= $jml_peserta; $i++) {
-                    $html .= '<div class="mb-2 row">
+                    $form .= '<div class="mb-2 row">
                             <label for="nama peserta" class="col-sm-4 col-form-label">Nama Peserta '.$i.'*</label>
                             <div class="col-sm-8">
                             <input type="text" name="peserta'.$i.'" class="form-control"  value="" required>
@@ -141,7 +221,7 @@ function button_beli()
                             </div>
                         </div>';
                     }
-                    $html .='<div class="mb-2 row">
+                    $form .='<div class="mb-2 row">
                         <label for="nama peserta" class="col-sm-4 col-form-label">Punya kupon?</label>
                         <div class="col-sm-8">    
                         <div class="input-group mb-3">              
@@ -153,23 +233,24 @@ function button_beli()
                         </div>
                     </div>';
             
-                    $html .= "<p><strong>" . get_the_title() . "</strong><br>             
+                    $form .= "<p><strong>" . get_the_title() . "</strong><br>             
                         Rp</span> " . number_format($total_harga) . " x " . $jml_peserta . " = Rp <span class='harga_asli'><span class='tru'></span>" . number_format($total_harga) . "</span> &nbsp;<span class='harga_baru'></span>                      
                     </p>";
-                    $html .= "<input type='hidden' id='training_id' name='training_id' value='". $post->ID ."'>";
-                    $html .= "<input type='hidden' id='training_title' name='training_title' value='". $post->post_title ."'>";
-                    $html .= '<input type="hidden" name="url" id="url" class="" value="'. get_the_permalink() .'">';
-                    $html .= "<input type='hidden' id='total_harga' name='total_harga' value='".$total_harga."'>";
-                    $html .= "<input type='hidden' name='submitted' value='checkout'>
+                    $form .= "<input type='hidden' id='training_id' name='training_id' value='". $post->ID ."'>";
+                    $form .= "<input type='hidden' id='training_title' name='training_title' value='". $post->post_title ."'>";
+                    $form .= '<input type="hidden" name="url" id="url" class="" value="'. get_the_permalink() .'">';
+                    $form .= "<input type='hidden' id='total_harga' name='total_harga' value='".$total_harga."'>";
+                    $form .= "<input type='hidden' name='submitted' value='checkout'>
                         <hr style='border-top:1px solid white; padding:10px 0;'>
                         <p><button type='submit' class='button button_beli btn btn-warning' id='button_checkout'>
                             <span class='spinner-border text-light spinner-border-sm d-none' role='status' aria-hidden='true'></span>
                                 <span class='visually-hidden'>Loading...</span>
-                        Konfirmasi Pesanan</button></p>";  
-                    $html .= "</form></div>"; 
-                } else if($status_pendaftaran == 'tambah_peserta') { // status, sudah tambah peserta tinggal bayar aja
-
-                  
+                                Selanjutnya <i class='fas fa-arrow-right'></i> 
+                                </button></p>";  
+                    $form .= "</form></div>"; //#load close 
+                
+                }  else if($status_pendaftaran == 'tambah_peserta') {
+                   
                     $transaksi = array(
                         'post_id' => $post->ID,
                         'post_title' => $post->post_title,
@@ -179,16 +260,51 @@ function button_beli()
 
                     $snapToken = get_midtrans($transaksi);
 
-                $html .= '<div id="bayar-midtranss" class="p-3"> 
-                <h5>Pesanan Anda</h5>
-                <p>Training : ' . $training->post_title . ' (' . $jml_peserta . ' peserta)</p>
-                <p>Rp: ' . number_format($total_bayar) . '</p>
-                <button id="pay-button" class="btn btn-warning btn-lg btn-block">Bayar Sekarang</button>
+                    $form .= '<h5 class="text-center">Beli Program Ini</h5>';
+                    $form .= '                    
+                    <ul class="my-4 nav nav-pills d-flex justify-content-center">
+                        <li class="nav-item">
+                        <a class="nav-link text-center" aria-current="page" href="#">
+                        <span class="badge rounded-pill">1</span><br>
+                        Mulai</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-center" aria-current="page" href="#">
+                            <span class="badge rounded-pill">2</span><br>
+                            Tambah Peserta</a>
+                        </li>
+                        <li class="nav-item bayar">
+                            <a class="nav-link aktif text-center" aria-current="page" href="#">
+                            <span class="badge rounded-pill">3</span><br>
+                            Bayar</a>
+                        </li>
+                        <li class="nav-item selesai">
+                            <a class="nav-link text-center" aria-current="page" href="#">
+                            <span class="badge rounded-pill">4</span><br>
+                            Selesai</a>
+                        </li>
+                        
+                    </ul>';
+
+                $form .= '<div id="bayar-midtranss" class=" ms-2"> 
+                <table class="table bg-primary">
+                    <tr>
+                        <td>Training</td>
+                        <td>: ' . $training->post_title . ' (' . $jml_peserta . ' peserta)</td>
+                    </tr>
+                    <tr>
+                        <td>Total Bayar</td>
+                        <td>: Rp: ' . number_format($total_bayar) . '</td>
+                    </tr>
+                </table>
+
+                <button id="pay-button" class="btn btn-warning btn-block">Bayar Sekarang</button>
 
                 <div id="bayar-sukses"></div>
                 <div id="result-json"></div>
+                <br />
                 ';
-                $html .= '
+                $form .= '
                 <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-NUHDTW6uipcvE7sz"> </script>
                 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
                 <script type="text/javascript"> 
@@ -217,6 +333,8 @@ function button_beli()
                                     if( "success" == response.type ) {
                                         $("#pay-button").hide();
                                         $("#bayar-sukses").html("Terima kasih, pembayaran Anda berhasil.");
+                                        $(".nav-item.bayar a").removeClass("aktif");
+                                        $(".nav-item.selesai a").addClass("aktif");
                                     }
                                     else {
                                        alert( "Error" );
@@ -288,19 +406,45 @@ function button_beli()
                 });    
                      
             </script></div>';
-                } else  {
 
-                    $html .= "<div class='py-3 px-3 pe-2' ><span class='alert alert-warning d-block;' style='display:block;width:100%;'><i class='fas fa-exclamation-triangle'></i> Anda sudah terdaftar di program ini</span></div>";
+                } else {
                     
-                    
-                } 
+                    $form .= '<h5 class="text-center">Beli Program Ini</h5>';
+                    $form .= '                    
+                    <ul class="my-4 nav nav-pills d-flex justify-content-center">
+                        <li class="nav-item">
+                        <a class="nav-link text-center" aria-current="page" href="#">
+                        <span class="badge rounded-pill">1</span><br>
+                        Mulai</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-center" aria-current="page" href="#">
+                            <span class="badge rounded-pill">2</span><br>
+                            Tambah Peserta</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-center" aria-current="page" href="#">
+                            <span class="badge rounded-pill">3</span><br>
+                            Bayar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link aktif text-center" aria-current="page" href="#">
+                            <span class="badge rounded-pill">4</span><br>
+                            Selesai</a>
+                        </li>
+                        
+                    </ul>';
 
-                echo $html;
-            } 
+                    $form .= "<div class='py-3 px-3 pe-2' ><span class='alert alert-warning d-block;' style='display:block;width:100%;'><i class='fas fa-exclamation-triangle'></i> Anda sudah terdaftar di program ini</span></div>";
+                    
+                }                    
+            }
         }
     }
 
-    return $form;   
+    return $form;
+
+    
 }
 
 /*-------- Login ----------*/
@@ -454,7 +598,7 @@ function harga()
 function status_transaksi($user_id, $post_id) {    
     $args = array(
         'post_type'     => 'orders',
-        'post_status'   => 'publish',
+        'post_status'   => 'draft',
         'author'   => $user_id,
         'meta_query'    => array(
             'compare' => 'AND',

@@ -5,7 +5,7 @@
 * Author: Yaufani Adam
 * Author URI: https://solusidesain.net
 * Description: Theme for Scientina Skill
-* Version: 1.0.8
+* Version: 1.0.9
 * License: GNU General Public License version 3.0
 * License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -335,4 +335,25 @@ p.keranjang_belanja i {
 
 #bayar-midtrans, #loading, #daftar_berhasil, #daftar_error {
   display: none;
+}
+
+.nav-pills li.nav-item {
+  width:90px;
+}
+.nav-pills li.nav-item .nav-link{
+  font-size:12px;
+  padding:0;
+  display:block;
+  padding-bottom:5px;
+  border-radius: 0;
+}
+.nav-pills li.nav-item .nav-link .badge{
+  font-size:16px;
+  margin-bottom:10px;
+  background:rgba(255, 255, 255, 0.3)
+}
+
+.nav-item .nav-link.aktif .badge {
+  background:white !important;
+  color:#cc6e2f;
 }

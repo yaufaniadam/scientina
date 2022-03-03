@@ -243,7 +243,7 @@ function checkout()
       $data_order = array(
         'ID'    =>  sanitize_text_field($field['training_id']),
         'post_title'    =>  sanitize_text_field($userdata->user_login),
-        'post_status'   => 'publish',
+        'post_status'   => 'draft',
         'post_author'   => get_current_user_id(),
         'post_type'   => 'orders',
       );

@@ -408,7 +408,7 @@ function orders_custom_columns($column){
       break;
       case "status_daftar":   
                
-       echo $status_daftar;
+       echo status_daftar($status_daftar);
 
       break;
       case "status":   
