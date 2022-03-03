@@ -22,39 +22,6 @@ add_filter( 'manage_users_custom_column', 'new_modify_user_table_row', 10, 3 );
 ///////////////////////////////
 
 
- // Hook for adding admin menus
- add_action('admin_menu', 'wpcp_coupon_add_pages');
- 
- // action function for above hook
- 
-function wpcp_coupon_add_pages() {
-    $menu_slug = 'wpcp-coupon';
-     add_menu_page(
-        __( 'All Coupons', 'textdomain' ),
-        __( 'Coupons','textdomain' ),
-        'manage_options',
-        $menu_slug,
-        'wpcp_coupon_page_callback',
-        'dashicons-tag',25
-    );
-    add_submenu_page( 
-        $menu_slug,  
-        'Add Coupon',
-        'Add Coupon',
-        'manage_options',
-        'wpcp_coupon_add',
-        'wpcp_coupon_add_callback',      
-    );
-    add_submenu_page( 
-        'hide',  
-        'Edit Coupon',
-        'Edit Coupon',
-        'manage_options',
-        'wpcp_coupon_edit',
-        'wpcp_coupon_edit_callback',      
-    );
-}
-
 
  
 /**
@@ -75,33 +42,53 @@ function wpcp_coupon_add_pages() {
         <table class="wp-list-table widefat fixed striped table-view-list pages" style="margin-top:8px;">
         <thead>
             <tr>
-                <th scope="col" id="title" ><span>Program</span></th>                	
+                <th scope="col" id="title" width="35%"><span>Program</span></th>                	
                 <th scope="col" id="title" ><span>Coupon Code</span></th>                	
+                <th scope="col" id="title" ><span>Quota</span></th>                	
                 <th scope="col" id="date"><span>Discount</span></th>	
                 <!-- <th scope="col" id="date"><span>Type</span></th> -->
                 <th scope="col" id="author">Start Date</th>     
                 <th scope="col" id="date"><span>End Date</span></th>	
                 <th scope="col" id="date"><span>Active</span></th>	
-                <th scope="col" id="date"><span>Delete</span></th>	
+                <!-- <th scope="col" id="date"><span>Delete</span></th>	 -->
             </tr>
         </thead>
         <tbody>
-            <?php foreach($results as $result) { ?>
-            <tr>
-                <td><a href="admin.php?page=wpcp_coupon_add&id=<?php echo $result['id']; ?>"><?php echo $result['program']; ?></a></td>
+            <?php foreach($results as $result) { 
+
+                $now = date("Y-m-d H:i:s");
+                $end_date = $result['end_date'];
+
+                if($result['active'] == 0) {
+                    $active = 'Inactive';
+                } else {
+                    $active ='Active';
+                }
+
+                ?>
+            <tr class="<?php echo $active; ?>">
+                <td><a href="admin.php?page=wpcp_coupon_add&id=<?php echo $result['id']; ?>"><?php echo $result['program']; if($now > $end_date) { echo " <span style='color:red; font-weight:bold;'> &#9888;</span>"; } ?></a></td>
                 <td><?php echo $result['code']; ?></td>
+                <td><?php echo $result['quota']; ?></td>
                 <td><?php echo $result['discount']; ?></td>
                 <!-- <td><?php echo $result['type']; ?></td> -->
                 <td><?php echo $result['start_date']; ?></td>
                 <td><?php echo $result['end_date']; ?></td>
-                <td><?php echo $result['active']; ?></td>
-                <td>Delete</td>
+                <td><?php echo $active;   ?></td>
+                <!-- <td>Delete</td> -->
             </tr>
             <?php } ?>
         </tbody>
         </table>
+        <span style='color:red; font-weight:bold;'> &#9888;</span> Coupon expired
     
     </div>
+
+    <style>
+        tr.Inactive td {
+            color:orange;
+        }
+    </style>
 
      <!-- generate_coupon_code(5, 1); -->
 
@@ -114,6 +101,7 @@ function wpcp_coupon_add_callback() {
         $program = $_POST['program'];
         $code = $_POST['code'];
         $discount = $_POST['discount'];
+        $quota = $_POST['quota'];
         $type = 1;
         $start_date = strftime('%Y-%m-%d %H:%M:%S', strtotime(sanitize_text_field($_POST['start_date'])));
         $end_date = strftime('%Y-%m-%d %H:%M:%S', strtotime(sanitize_text_field($_POST['end_date'])));
@@ -128,7 +116,8 @@ function wpcp_coupon_add_callback() {
             'type' => $type, 
             'start_date' => $start_date, 
             'end_date' => $end_date,
-            'active' => $active
+            'active' => $active,
+            'quota' => $quota
         );
         $format = array('%s','%s', '%d', '%d', '%s', '%s', '%d');
 
@@ -136,16 +125,18 @@ function wpcp_coupon_add_callback() {
             $wpdb->insert($table,$data,$format);
             $my_id = $wpdb->insert_id;
 
-            $url= 'admin.php?page=wpcp_coupon_add&id=' .$my_id;
+            $url= 'admin.php?page=wpcp_coupon_add&id=' .$my_id. '&status=sukses';
 
-            // echo("<script>location.href = '".$url."';</script>");
+            echo("<script>location.href = '".$url."';</script>");
         } else {
             $id = $_POST['id'];
             $where = [ 'id' => $id ];
-            $wpdb->update($table,$data,$where, $format);
-            $url= 'admin.php?page=wpcp_coupon_add&id=' .$id;
+            $update = $wpdb->update($table,$data,$where, $format);
 
-            echo("<script>location.href = '".$url."';</script>");
+            if($update) {
+                $url= 'admin.php?page=wpcp_coupon_add&id=' .$id . '&status=sukses';
+                echo("<script>location.href = '".$url."';</script>");
+            }
         }
 
     } else {
@@ -171,7 +162,10 @@ function wpcp_coupon_add_callback() {
         <h1 class="wp-heading-inline"><?php echo (isset($id)) ? 'Edit': 'Add'; ?> Coupon</h1>
     </div>
 
-<div class="container">
+<div class="container" style="margin-right:20px;max-width:50%;">
+    <?php if(isset($_GET['status'])) 
+        echo '<div id="message" class="updated notice notice-success is-dismissible"><p>Success. </p></div>';
+    ?>
     <form action='' method='post'>
         <?php wp_nonce_field('post_nonce', 'post_nonce_field'); 
         
@@ -227,6 +221,14 @@ function wpcp_coupon_add_callback() {
             </div>
             <div class="col-7">
                 <input type="text" class="form-control" name="discount" id="discount"  placeholder="Ex: 50" style="width:60%" required value="<?php echo (isset($id)) ? $results['discount']: ''; ?>"> %
+            </div>
+        </div>    
+        <div class="row">
+            <div class="col-2">
+                Quota*
+            </div>
+            <div class="col-7">
+                <input type="text" class="form-control" name="quota" id="quota"  placeholder="Ex: 50" style="width:60%" required value="<?php echo (isset($id)) ? $results['quota']: ''; ?>"> Coupons
             </div>
         </div>    
         <div class="row">

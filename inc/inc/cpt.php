@@ -29,7 +29,7 @@ function create_post_types_training()
     'has_archive'     => true,
     'menu_position'   => 20,
     'publicly_queryable'   => true,
-    'show_ui'   => true,
+    'show_in_menu'   => false,
     'exclude_from_search'=>false
   );
   register_post_type('training', $args);
@@ -102,6 +102,7 @@ function create_post_types_order()
     'not_found_in_trash' => __('No Order found in Trash', 'scientina'),
     'parent_item_colon' => ''
   );
+  $count = 32;
   $args = array(
     'labels'       => $label,
     'description'     => __('All Order upload here', 'scientina'),
@@ -113,6 +114,8 @@ function create_post_types_order()
     'show_in_nav_menus' => false,
     'has_archive'     => false,
     'menu_position'   => 20,
+    'show_in_menu'=>false,
+    'all_items' => $count ? 'All tickets <span class="awaiting-mod">' . $count . '</span>' : 'All tickets',
   );
   register_post_type('orders', $args);
 }
@@ -144,6 +147,7 @@ function create_post_types_trainer()
     'rewrite'       => array('slug' => 'trainer'),
     'menu_icon'      => 'dashicons-businessman',
     'show_in_nav_menus' => false,
+    'show_in_menu' => false,
     'has_archive'     => false,
     'menu_position'   => 20,
   );
@@ -177,6 +181,7 @@ function create_post_types_participant()
     'rewrite'       => array('slug' => 'participant'),
     'menu_icon'      => 'dashicons-businessman',
     'show_in_nav_menus' => false,
+    'show_in_menu' => false,
     'has_archive'     => false,
     'menu_position'   => 20,
   );

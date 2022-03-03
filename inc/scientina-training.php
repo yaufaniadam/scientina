@@ -1,51 +1,18 @@
 <?php
-/*
-   Plugin Name: Scientina Training
-   Version: 1.0.2
-   Author: Yaufani Adam
-   Author URI: https://solusdesain.net
-   Description: Plugin
-   Text Domain: scientina
-   License: GPLv3
-*/
 
 defined('ABSPATH') or die('No direct access!');
 
 require_once('inc/cpt.php');
+require_once('inc/midtrans-php/Midtrans.php');
 require_once('inc/shortcode.php');
 require_once('inc/coupon.php');
-require_once('inc/midtrans-php/Midtrans.php');
-
-function jsforwp_frontend_scripts()
-{
-
-  wp_enqueue_script(
-    'scajax-js',
-    plugins_url('/assets/js/scajax.js', __FILE__),
-    ['jquery'],
-    time(),
-    true
-  );
-
-  wp_localize_script(
-    'scajax-js',
-    'scajax_globals',
-    [
-      'ajax_url'    => admin_url('admin-ajax.php'),
-      'nonce'       => wp_create_nonce('scajax_nonce')
-    ]
-  );
-}
-add_action('wp_enqueue_scripts', 'jsforwp_frontend_scripts');
-require_once('assets/lib/plugin-page.php');
-
 
 // training_running
 add_action('elementor/query/training_running', function ($query) {
   // // Append our meta query
   $meta_query[] = [
     'key' => 'running',
-    'value' => '"yes"',
+    'value' => 'running',
     'compare' => 'like'
   ];
   $query->set('meta_query', $meta_query);
@@ -58,8 +25,8 @@ add_action('elementor/query/training_scheduled', function ($query) {
   // // Append our meta query
   $meta_query[] = [
     'key' => 'running',
-    'value' => '"yes"',
-    'compare' => 'not like'
+    'value' => 'scheduled',
+    'compare' => 'like'
   ];
   $query->set('meta_query', $meta_query);
   $query->set('post_type', ['training']);
@@ -161,10 +128,8 @@ function registrasi()
 
   }  else {
 
-
     $response['button'] = $field['submitted'];
     $error = 'noerror';
-
 
   }
 
@@ -178,11 +143,15 @@ function registrasi()
             "harga" => sanitize_text_field($field['harga']),
             "jml_peserta" => sanitize_text_field($field['jml_peserta']),
           )    
-        );       
+        );     
+        
+          //ambil nama users
+      $userdata = get_userdata(get_current_user_id());
 
         $data_order = array(
-          'post_title'    =>  $query["post_title"],
-          'post_status'   => 'pending',
+          // 'post_title'    =>  $query["post_title"],
+          'post_title'    =>  sanitize_text_field($userdata->user_login),
+          'post_status'   => 'draft',
           'post_author'   => get_current_user_id(),
           'post_type'   => 'orders',
         );
@@ -191,12 +160,12 @@ function registrasi()
         $result = wp_insert_post($data_order);
 
         if($result) {
-          $total_harga = $field["harga"]*$field["jml_peserta"];
+          $total_harga = sanitize_text_field($field["harga"])*sanitize_text_field($field["jml_peserta"]);
 
-          add_post_meta($result, 'jml_peserta', $field['jml_peserta'], true);
+          add_post_meta($result, 'jml_peserta', sanitize_text_field($field['jml_peserta']), true);
           add_post_meta($result, 'total_harga', $total_harga, true);
           add_post_meta($result, 'training', $query['ID'], true);
-          add_post_meta($result, 'status_bayar', 'tambah_peserta', true);
+          add_post_meta($result, 'status_pendaftaran', 'awal', true);
         }
    
   }
@@ -236,7 +205,6 @@ function checkout()
     $field[urldecode($id_field[0])] = urldecode($id_field[1]);
   }
 
-
   if ($field['submitted'] == 'checkout') {
 
     for ($i = 1; $i <= $field['jml_peserta']; $i++) {
@@ -269,10 +237,13 @@ function checkout()
 
       }
 
+      //ambil nama users
+      $userdata = get_userdata(get_current_user_id());
+
       $data_order = array(
-        'ID'    =>  $field['training_id'],
-        'post_title'    =>  $field['training_title'],
-        'post_status'   => 'pending',
+        'ID'    =>  sanitize_text_field($field['training_id']),
+        'post_title'    =>  sanitize_text_field($userdata->user_login),
+        'post_status'   => 'publish',
         'post_author'   => get_current_user_id(),
         'post_type'   => 'orders',
       );
@@ -281,11 +252,35 @@ function checkout()
       $result = wp_update_post($data_order);
 
       if ($result && !is_wp_error($result)) {
+
+        $cekkupon = detailkupon(sanitize_text_field($field['coupon']));
+        $subtotal = sanitize_text_field($field['total_harga']);
+       
+        if($cekkupon) {
+            date_default_timezone_set('Asia/Jakarta');
+            $today = date('Y-m-d H:i:s');
+
+            if (($today >= $cekkupon['start_date']) && ($today <= $cekkupon['end_date']) && ($cekkupon['quota'] > 0) ){
+             
+                $response['discount'] = $cekkupon['discount'];
+
+                $mindiskon = $subtotal*($cekkupon['discount']/100);
+                $diskon = $subtotal - $mindiskon;
+                
+            } else {
+                 $diskon = $field['total_harga'];
+            }       
+
+        } else {
+           $diskon = $field['total_harga'];
+        }  
+     
         $post_id = $field['training_id'];
         add_post_meta($post_id, 'participant', $users, true);
-        add_post_meta($post_id, 'harga_diskon', $field['harga_diskon'], true);
-        add_post_meta($post_id, 'kode_kupon', $field['coupon'], true);
-        update_field( 'status_bayar', 'belum_bayar', $result);
+        add_post_meta($post_id, 'total_harga', sanitize_text_field($field['total_harga']), true);
+        add_post_meta($post_id, 'total_bayar', sanitize_text_field($diskon), true);
+        add_post_meta($post_id, 'kode_kupon', sanitize_text_field($field['coupon']), true);
+        update_field( 'status_pendaftaran', 'tambah_peserta', $post_id);
       }
 
       $error = 'noerror';
@@ -301,6 +296,7 @@ function checkout()
   echo $response;
   die();
 }
+
 //////////////////////
 ///    TRANSAKSI   ////
 //////////////////////
@@ -310,23 +306,43 @@ add_action('wp_ajax_nopriv_transaksi', 'transaksi');
 function transaksi()
 {
   check_ajax_referer('scajax_nonce');
-  $order_id = $_POST['order_id']; //order id di WP
-   $result = $_POST['result'];
-  $kode_transaksi = $_POST['kode_transaksi'];
-  if($kode_transaksi == 200) {
+  $order_id = sanitize_text_field($_POST['order_id']); //order id di WP
+  $result = $_POST['result'];
 
-    update_field( 'status_bayar', 'lunas', $order_id);
-    update_field( 'transaction_id', $result['transaction_id'], $order_id);
-    update_field( 'order_id', $result['order_id'], $order_id);
-    update_field( 'transaction_time', $result['transaction_time'], $order_id);
-    update_field( 'bank', $result['bank'], $order_id);
-    update_field( 'payment_type', $result['payment_type'], $order_id);
-    update_field( 'status_code', $result['status_code'], $order_id);
-    update_field( 'jumlah_bayar', $result['gross_amount'], $order_id);
-  }
-  
+  update_field( 'total_bayar',  $result['gross_amount'], $order_id);
+  update_field( 'transaction_time', $result['transaction_time'], $order_id);
+  update_field( 'transaction_id', $result['transaction_id'], $order_id);
+  update_field( 'order_id', $result['order_id'], $order_id);
+  update_field( 'status_pendaftaran', 'sudah_bayar', $order_id);
+
   $response['order_id'] = $order_id;
   $response['result'] = $result;
+  $response['type'] = 'success';
+  $response = json_encode($response);
+  echo $response;
+  die();
+}
+
+///////////////////////
+///    TRANSAKSI   ////
+//////////////////////
+
+add_action('wp_ajax_verifikasi', 'verifikasi');
+add_action('wp_ajax_nopriv_verifikasi', 'verifikasi');
+function verifikasi()
+{
+  check_ajax_referer('scajax_nonce');
+  $order_id = sanitize_text_field($_POST['order_id']); //order id di WP
+  $training = sanitize_text_field($_POST['training']); //order id di WP
+
+  $participant = get_field( 'participant', $order_id);
+  foreach ($participant as $participant) {
+    update_field('training', $training, $participant);
+    update_field('status_peserta', 'disetujui', $participant);
+  }
+
+  update_field( 'status_pendaftaran', 'selesai', $order_id);
+
   $response['type'] = 'success';
   $response = json_encode($response);
   echo $response;

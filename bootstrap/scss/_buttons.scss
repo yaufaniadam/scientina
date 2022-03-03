@@ -77,7 +77,7 @@
 // Make a button look and behave like a link
 .btn-link {
   font-weight: $font-weight-normal;
-  color: $btn-link-color;
+  color: $body-color;
   text-decoration: $link-decoration;
 
   &:hover {
