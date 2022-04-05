@@ -340,6 +340,11 @@ p.keranjang_belanja i {
 .nav-pills li.nav-item {
   width:90px;
 }
+@media (max-width: 700px) {
+  .nav-pills li.nav-item {
+    width:70px;
+  }
+}
 .nav-pills li.nav-item .nav-link{
   font-size:12px;
   padding:0;
